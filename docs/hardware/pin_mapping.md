@@ -2,7 +2,7 @@
 ## Gas Node
 | Device | GPIO | Notes |
 |:------ | ---: | :----------: |
-| MQ-2 | 20 | Digital input |
+| MQ-2 | 21 | Digital input |
 | DHT22 | 4 | Digital |
 | Relay | 18 | Output |
 | Buzzer | 19 | Output |
