@@ -4,7 +4,7 @@ import dht
 import network
 
 # Pin Configurations
-gas_sensor_pin = 22
+gas_sensor_pin = 20
 dht_sensor_pin = 4
 relay_pin = 18
 Buzzer_pin = 19
