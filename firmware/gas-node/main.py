@@ -10,7 +10,6 @@ dht_sensor = dht.DHT22(DHT_SENSOR)
 
 
 while True:
-    stop_buzzer()  # Ensure buzzer is off at startup
 
     # Read gas sensor value
     gas_value = GAS_SENSOR.value()
