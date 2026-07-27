@@ -1,11 +1,16 @@
+from machine import Pin
+import time
+import dht
+import network
+
 # Pin Configurations
-gas_sensor_pin = 20
+gas_sensor_pin = 22
 dht_sensor_pin = 4
 relay_pin = 18
 Buzzer_pin = 19
 LED_pin = 2
-Wi-Fi_SSID = "Your_WiFi_SSID"
-Wi-Fi_PASSWORD = "Your_WiFi_Password"
+WiFi_SSID = "Your_WiFi_SSID"
+WiFi_PASSWORD = "Your_WiFi_Password"
 
 # Pin Objects
 GAS_SENSOR = Pin(gas_sensor_pin, Pin.IN)

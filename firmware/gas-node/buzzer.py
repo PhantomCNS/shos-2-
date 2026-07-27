@@ -1,6 +1,10 @@
-import time
 from machine import PWM
 from config import BUZZER
+import config
+import network
+import dht
+import time
+
 
 buzzer_pwm = PWM(BUZZER)
 buzzer_pwm.duty(0)  # Start silent until alert begins
