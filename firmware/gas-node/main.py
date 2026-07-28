@@ -68,13 +68,13 @@ while True:
 
         alarm_sent = False            
 
-    if config.fan.value() == 1:
+    if config.fan.value() == 1 or config.RELAY.value() == 1:
         fan_state = "Fan is ON"
         BlynkMan.send_relay(1)  # Send relay value to virtual pin V4
     else:
         fan_state = "Fan is OFF"
         BlynkMan.send_relay(0)  # Send relay value to virtual pin V4
-        
+
     # Print sensor values for debugging
     utils.debug_print("Gas Sensor Value:" + str(gas_state))
     utils.debug_print("DHT Humidity Value:" + str(dht_humidity))
