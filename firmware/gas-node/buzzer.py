@@ -1,14 +1,12 @@
-from utils import debug_print
+import utils
 from machine import PWM
-from config import BUZZER
 import config
 import network
 import dht
 import time
-from BlynkMan import blynk
 
 
-buzzer_pwm = PWM(BUZZER)
+buzzer_pwm = PWM(config.BUZZER)
 buzzer_pwm.duty(0)  # Start silent until alert begins
 
 # buzzer initialization
@@ -29,19 +27,3 @@ def play_gas_alert(cycles=3, first_freq=900, second_freq=1400, duration=0.4):
 def stop_buzzer():
     buzzer_pwm.duty(0)  # Turn off buzzer
 
-muted = True  # Global variable to track buzzer state
-
-# Mute buzzer function
-@blynk.on(config.SWITCH_IN_VPIN)
-def mute_buzzer(value):
-    global muted
-    debug_print("Buzzer state changed to: " + str(value[0]))
-    if value[0] == "1":
-        muted = True
-    else:
-        muted = False
-
-# Function to play gas alert if buzzer is allowed to sound
-def buzzer_allowed():
-    if not muted:
-        play_gas_alert(cycles=2)

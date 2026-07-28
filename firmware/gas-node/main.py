@@ -1,82 +1,84 @@
-from logging import DEBUG
-
 from machine import Pin
 import time
-from config import GAS_SENSOR, DHT_SENSOR, RELAY, LED, BLYNK_TEMPLATE_ID, blynk_auth_token, WiFi_SSID, WiFi_PASSWORD
-from buzzer import play_gas_alert, stop_buzzer, mute_buzzer, muted, buzzer_allowed
-import network
+import config
+import connect
+import buzzer
 import dht 
 import BlynkLib
-from BlynkMan import send_gas, send_temperature, send_humidity, send_relay, blynk
-from utils import debug_print
+import BlynkMan 
+import utils
 
-dht_sensor = dht.DHT22(DHT_SENSOR)
-
+dht_sensor = dht.DHT22(config.DHT_SENSOR)
 
 
 # Initialize network and connect to WiFi
-wlan = network.WLAN(network.STA_IF)
-def connect_to_wifi(ssid, password):
-    wlan.active(True)
-    wlan.connect(ssid, password)
-    while not wlan.isconnected():
-        time.sleep(1)
-    debug_print("Connected to WiFi:" + str(wlan.ifconfig()))
 
-connect_to_wifi(WiFi_SSID, WiFi_PASSWORD)
-# Initialize Blynk
+muted = True  # Global variable to track buzzer state
+
+# Mute buzzer function
+@connect.blynk.on(config.SWITCH_IN_VPIN)
+def mute_buzzer(value):
+    global muted
+    utils.debug_print("Buzzer state changed to: " + str(value[0]))
+    if value[0] == "1":
+        muted = True
+    else:
+        muted = False
+
+
+# Function to play gas alert if buzzer is allowed to sound
+def buzzer_allowed():
+    if not muted:
+        buzzer.play_gas_alert(cycles=2)
+
 
 alarm_sent = False
 # Main loop
 while True:
 
-    if not wlan.isconnected():
-        connect_to_wifi(WiFi_SSID, WiFi_PASSWORD)
-        blynk = BlynkLib.Blynk(blynk_auth_token,
-            tmpl_id = BLYNK_TEMPLATE_ID,
-            insecure = True
-            )
+    if not connect.wlan.isconnected():
+       blynk = connect.connect_everything()  # Reconnect to WiFi and Blynk if disconnected
 
     # Read gas sensor value
-    gas_value = GAS_SENSOR.value()
+    gas_value = config.GAS_SENSOR.value()
     # Read DHT sensor value 
     dht_sensor.measure()
     dht_temp = dht_sensor.temperature()  
     dht_humidity = dht_sensor.humidity() 
 
-    blynk.run()  # Process Blynk events
+    connect.blynk.run()  # Process Blynk events
 
     # Control relay and alert pattern based on gas sensor value
     if gas_value == 0:
-        LED.on()
+        config.LED.on()
         buzzer_allowed()  # play gas alert if buzzer is allowed to sound
-        debug_print("Gas leak detected, buzzer activated")
-        RELAY.on()
+        utils.debug_print("Gas leak detected, buzzer activated")
+        config.RELAY.on()
         gas_state = "!!GAS LEAK DETECTED!!"
 
         if not alarm_sent:
-            blynk.log_event("gas_leak", "Gas leak detected in kitchen")
+            connect.blynk.log_event("gas_leak", "Gas leak detected in kitchen")
             alarm_sent = True
 
     else:
-        LED.off()
-        stop_buzzer()
-        RELAY.off()
+        config.LED.off()
+        buzzer.stop_buzzer()
+        config.RELAY.off()
         gas_state = "Gas levels normal"
 
         alarm_sent = False            
 
     # Print sensor values for debugging
-    debug_print("Gas Sensor Value:" + str(gas_value))
-    debug_print("DHT Humidity Value:" + str(dht_humidity))
-    debug_print("DHT Temperature Value:" + str(dht_temp))
+    utils.debug_print("Gas Sensor Value:" + str(gas_value))
+    utils.debug_print("DHT Humidity Value:" + str(dht_humidity))
+    utils.debug_print("DHT Temperature Value:" + str(dht_temp))
 
 
     # Send sensor values to Blynk
-    send_humidity(dht_humidity)  # Send humidity value to virtual pin V2
-    send_temperature(dht_temp)  # Send temperature value to virtual pin V3
-    send_gas(gas_value)  # Send gas sensor value to virtual pin V1
-    send_relay(RELAY.value())  # Send relay value to virtual pin V4
+    BlynkMan.send_humidity(dht_humidity)  # Send humidity value to virtual pin V2
+    BlynkMan.send_temperature(dht_temp)  # Send temperature value to virtual pin V3
+    BlynkMan.send_gas(gas_value)  # Send gas sensor value to virtual pin V1
+    BlynkMan.send_relay(config.RELAY.value())  # Send relay value to virtual pin V4
 
     # Wait for a second before the next reading
     time.sleep(1)
