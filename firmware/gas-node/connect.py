@@ -17,7 +17,6 @@ def connect_to_wifi(ssid, password):
 
 
 connect_to_wifi(config.WiFi_SSID, config.WiFi_PASSWORD)
-blynk = connect_blynk()
 
 def connect_blynk():
     blynk = BlynkLib.Blynk(config.blynk_auth_token,
@@ -25,6 +24,8 @@ def connect_blynk():
         insecure = True
         )
     return blynk
+
+blynk = connect_blynk()
 
 while not wlan.isconnected():
     connect_to_wifi()
