@@ -13,7 +13,7 @@ dht_sensor = dht.DHT22(config.DHT_SENSOR)
 
 # Initialize network and connect to WiFi
 
-muted = True  # Global variable to track buzzer state
+muted = False  # Global variable to track buzzer state
 
 # Mute buzzer function
 @connect.blynk.on(config.SWITCH_IN_VPIN)
@@ -68,17 +68,24 @@ while True:
 
         alarm_sent = False            
 
+    if config.fan.value() == 1:
+        fan_state = "Fan is ON"
+    else:
+        fan_state = "Fan is OFF"
+
     # Print sensor values for debugging
-    utils.debug_print("Gas Sensor Value:" + str(gas_value))
+    utils.debug_print("Gas Sensor Value:" + str(gas_state))
     utils.debug_print("DHT Humidity Value:" + str(dht_humidity))
     utils.debug_print("DHT Temperature Value:" + str(dht_temp))
+    utils.debug_print("Relay State:" + str(config.RELAY.value()))
+    utils.debug_print("Fan State:" + str(fan_state))
 
 
     # Send sensor values to Blynk
     BlynkMan.send_humidity(dht_humidity)  # Send humidity value to virtual pin V2
     BlynkMan.send_temperature(dht_temp)  # Send temperature value to virtual pin V3
-    BlynkMan.send_gas(gas_value)  # Send gas sensor value to virtual pin V1
-    BlynkMan.send_relay(config.RELAY.value())  # Send relay value to virtual pin V4
+    BlynkMan.send_gas(gas_state)  # Send gas sensor value to virtual pin V1
+    BlynkMan.send_relay(fan_state)  # Send relay value to virtual pin V4
 
     # Wait for a second before the next reading
     time.sleep(1)

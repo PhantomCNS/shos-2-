@@ -24,7 +24,7 @@ def connect_blynk():
         insecure = True
         )
     return blynk
-
+# The last issue solved
 blynk = connect_blynk()
 
 while not wlan.isconnected():
