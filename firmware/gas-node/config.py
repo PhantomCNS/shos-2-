@@ -32,3 +32,5 @@ DHT_TEMP_VPIN = 1
 DHT_HUM_VPIN = 2
 RELAY_VPIN = 5
 SWITCH_IN_VPIN = "V4"
+
+dht_humidity_threshold = 60  # Humidity threshold for fan activation

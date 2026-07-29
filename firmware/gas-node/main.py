@@ -35,6 +35,7 @@ def buzzer_allowed():
 alarm_sent = False
 # Main loop
 while True:
+    global gas_state
 
     if not connect.wlan.isconnected():
        blynk = connect.connect_everything()  # Reconnect to WiFi and Blynk if disconnected
@@ -48,7 +49,7 @@ while True:
 
     connect.blynk.run()  # Process Blynk events
 
-    # Control relay and alert pattern based on gas sensor value
+    # Control relay and alert pattern based on gas sensor value & humidity threshold
     if gas_value == 0:
         config.LED.on()
         buzzer_allowed()  # play gas alert if buzzer is allowed to sound
@@ -60,6 +61,10 @@ while True:
             connect.blynk.log_event("gas_leak", "Gas leak detected in kitchen")
             alarm_sent = True
 
+    elif dht_humidity > config.dht_humidity_threshold:
+        config.RELAY.on()
+        utils.debug_print("Humidity threshold exceeded, fan activated")
+
     else:
         config.LED.off()
         buzzer.stop_buzzer()
@@ -68,12 +73,14 @@ while True:
 
         alarm_sent = False            
 
-    if config.fan.value() == 1 or config.RELAY.value() == 1:
-        fan_state = "Fan is ON"
-        BlynkMan.send_relay(1)  # Send relay value to virtual pin V4
-    else:
+        
+
+    if config.fan.value() == 1 and config.RELAY.value() == 1:
         fan_state = "Fan is OFF"
         BlynkMan.send_relay(0)  # Send relay value to virtual pin V4
+    else:
+        fan_state = "Fan is ON"
+        BlynkMan.send_relay(1)  # Send relay value to virtual pin V4
 
     # Print sensor values for debugging
     utils.debug_print("Gas Sensor Value:" + str(gas_state))
