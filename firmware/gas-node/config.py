@@ -12,11 +12,12 @@ dht_sensor_pin = 4
 relay_pin = 18
 Buzzer_pin = 19
 LED_pin = 2
+check_pin = 4
 fan_in_pin = 17
 BLYNK_TEMPLATE_ID = "TMPL2663gkE68"
 blynk_auth_token = "PtZuWfyPnv1tC9UJH8jtw85UmL-z9QTG"
-WiFi_SSID = "Wokwi-GUEST"
-WiFi_PASSWORD = ""
+WiFi_SSID = "Mohamed's A05s"
+WiFi_PASSWORD = "mh01013404152"
 
 # Pin Objects
 GAS_SENSOR = Pin(gas_sensor_pin, Pin.IN)
@@ -24,6 +25,7 @@ DHT_SENSOR = Pin(dht_sensor_pin, Pin.IN)
 RELAY = Pin(relay_pin, Pin.OUT)
 BUZZER = Pin(Buzzer_pin, Pin.OUT)
 LED = Pin(LED_pin, Pin.OUT)
+check-led = (check_pin, Pin.OUT)
 fan = Pin(fan_in_pin, Pin.IN)
 
 # BLYNK Configuration

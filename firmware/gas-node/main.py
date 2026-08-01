@@ -3,7 +3,7 @@ import time
 import config
 import connect
 import buzzer
-import dht 
+#import dht 
 import BlynkLib
 import BlynkMan 
 import utils
@@ -35,6 +35,7 @@ def buzzer_allowed():
 alarm_sent = False
 # Main loop
 while True:
+    config.LED.value(0)
     global gas_state
 
     if not connect.wlan.isconnected():
@@ -42,11 +43,13 @@ while True:
 
     # Read gas sensor value
     gas_value = config.GAS_SENSOR.value()
-    # Read DHT sensor value 
-    dht_sensor.measure()
-    dht_temp = dht_sensor.temperature()  
-    dht_humidity = dht_sensor.humidity() 
 
+    #################################
+    # Read DHT sensor value 
+    #dht_sensor.measure()
+    #dht_temp = dht_sensor.temperature()  
+    #dht_humidity = dht_sensor.humidity() 
+    #################################
     connect.blynk.run()  # Process Blynk events
 
     # Control relay and alert pattern based on gas sensor value & humidity threshold
@@ -60,10 +63,12 @@ while True:
         if not alarm_sent:
             connect.blynk.log_event("gas_leak", "Gas leak detected in kitchen")
             alarm_sent = True
+    #################################
 
-    elif dht_humidity > config.dht_humidity_threshold:
-        config.RELAY.on()
-        utils.debug_print("Humidity threshold exceeded, fan activated")
+    #elif dht_humidity > config.dht_humidity_threshold:
+    #    config.RELAY.on()
+    #    utils.debug_print("Humidity threshold exceeded, fan activated")
+    #################################
 
     else:
         config.LED.off()
@@ -84,15 +89,23 @@ while True:
 
     # Print sensor values for debugging
     utils.debug_print("Gas Sensor Value:" + str(gas_state))
-    utils.debug_print("DHT Humidity Value:" + str(dht_humidity))
-    utils.debug_print("DHT Temperature Value:" + str(dht_temp))
+
+    #################################
+    #utils.debug_print("DHT Humidity Value:" + str(dht_humidity))
+    #utils.debug_print("DHT Temperature Value:" + str(dht_temp))
+    #################################
+
     utils.debug_print("Relay State:" + str(config.RELAY.value()))
     utils.debug_print("Fan State:" + str(fan_state))
 
 
     # Send sensor values to Blynk
-    BlynkMan.send_humidity(dht_humidity)  # Send humidity value to virtual pin V2
-    BlynkMan.send_temperature(dht_temp)  # Send temperature value to virtual pin V3
+
+    #################################
+    #BlynkMan.send_humidity(dht_humidity)  # Send humidity value to virtual pin V2
+    #BlynkMan.send_temperature(dht_temp)  # Send temperature value to virtual pin V3
+    #################################
+
     BlynkMan.send_gas(gas_state)  # Send gas sensor value to virtual pin V1
     BlynkMan.send_relay(fan_state)  # Send relay value to virtual pin V4
 
