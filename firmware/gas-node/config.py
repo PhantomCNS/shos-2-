@@ -1,6 +1,6 @@
 from machine import Pin
 import time
-import dht
+#import dht
 import network
 #define BLYNK_TEMPLATE_ID "TMPL2663gkE68"
 #define BLYNK_TEMPLATE_NAME "SHOS 1"
@@ -25,7 +25,7 @@ DHT_SENSOR = Pin(dht_sensor_pin, Pin.IN)
 RELAY = Pin(relay_pin, Pin.OUT)
 BUZZER = Pin(Buzzer_pin, Pin.OUT)
 LED = Pin(LED_pin, Pin.OUT)
-check-led = (check_pin, Pin.OUT)
+check_led = Pin(check_pin, Pin.OUT)
 fan = Pin(fan_in_pin, Pin.IN)
 
 # BLYNK Configuration
