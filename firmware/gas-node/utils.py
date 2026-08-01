@@ -1,4 +1,4 @@
-DEBUG = True  # Set to True to enable debug prints
+DEBUG = False  # Set to True to enable debug prints
 
 def debug_print(message):
     if DEBUG:

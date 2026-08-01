@@ -17,7 +17,7 @@ fan_in_pin = 17
 BLYNK_TEMPLATE_ID = "TMPL2663gkE68"
 blynk_auth_token = "PtZuWfyPnv1tC9UJH8jtw85UmL-z9QTG"
 WiFi_SSID = "Emy"
-WiFi_PASSWORD = ""
+WiFi_PASSWORD = "Emy&Omar&Salma"
 
 # Pin Objects
 GAS_SENSOR = Pin(gas_sensor_pin, Pin.IN)
