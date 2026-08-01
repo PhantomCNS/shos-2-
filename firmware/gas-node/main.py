@@ -10,17 +10,11 @@ import utils
 
 # dht_sensor = dht.DHT22(config.DHT_SENSOR)
 
-# Initialize network and connect to WiFi
-if connect.ensure_connection():
-    print("System ready")
-else:
-    print("No connection")
 
 muted = False  # Global variable to track buzzer state
 
 
 # Mute buzzer function
-@connect.blynk.on(config.SWITCH_IN_VPIN)
 def mute_buzzer(value):
     global muted
     utils.debug_print("Buzzer state changed to: " + str(value[0]))
@@ -35,6 +29,13 @@ def buzzer_allowed():
     if not muted:
         buzzer.play_gas_alert(cycles=2)
 
+# Initialize network and connect to WiFi
+if connect.ensure_connection():
+    if not hasattr(connect.blynk, "_registered"):
+        connect.blynk.on(config.SWITCH_IN_VPIN)(mute_buzzer)
+        connect.blynk._registered = True
+else:
+    print("No connection")
 
 if connect.wlan.isconnected():
     print("Successfully Connected!!!")
@@ -51,6 +52,9 @@ while True:
     # dht_sensor.measure()
     # dht_temp = dht_sensor.temperature()
     # dht_humidity = dht_sensor.humidity()
+
+    connect.ensure_connection()
+
     if connect.blynk:
         connect.blynk.run()
 
