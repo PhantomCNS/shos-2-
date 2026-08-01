@@ -34,8 +34,7 @@ if connect.ensure_connection():
     if not hasattr(connect.blynk, "_registered"):
         connect.blynk.on(config.SWITCH_IN_VPIN)(mute_buzzer)
         connect.blynk._registered = True
-else:
-    print("No connection")
+
 
 if connect.wlan.isconnected():
     print("Successfully Connected!!!")
@@ -48,18 +47,8 @@ while True:
 
     gas_value = config.GAS_SENSOR.value()
     utils.debug_print("Gas value = " + str(gas_value))
-
-    # dht_sensor.measure()
-    # dht_temp = dht_sensor.temperature()
-    # dht_humidity = dht_sensor.humidity()
-
-    connect.ensure_connection()
-
-    if connect.blynk:
-        connect.blynk.run()
-
     if gas_value == 0:
-        config.LED.on()
+        config.red_LED.on()
         buzzer_allowed()
         utils.debug_print("Gas leak detected, buzzer activated")
         config.RELAY.on()
@@ -74,7 +63,7 @@ while True:
                 alarm_sent = True
 
     else:
-        config.LED.off()
+        config.red_LED.off()
         buzzer.stop_buzzer()
         config.RELAY.off()
         gas_state = "Gas levels normal"
@@ -83,10 +72,22 @@ while True:
     utils.debug_print("Gas Sensor Value: " + str(gas_state))
     utils.debug_print("Relay State: " + str(config.RELAY.value()))
 
+
+
+    # dht_sensor.measure()
+    # dht_temp = dht_sensor.temperature()
+    # dht_humidity = dht_sensor.humidity()
+
+    connect.ensure_connection()
+
+    if connect.blynk:
+        connect.blynk.run()
+
     # BlynkMan.send_humidity(dht_humidity)
     # BlynkMan.send_temperature(dht_temp)
 
-    BlynkMan.send_gas(gas_state)
+    if connect.blynk:
+        BlynkMan.send_gas(gas_state)
     # BlynkMan.send_relay(fan_state)
 
     time.sleep(1)

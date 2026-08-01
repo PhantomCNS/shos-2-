@@ -18,8 +18,12 @@ def connect_to_wifi():
         wlan.active(True)
 
     # Connect to WiFi
-    print("Connecting to WiFi...")
-    wlan.connect(config.WiFi_SSID, config.WiFi_PASSWORD)
+    try:
+        print("Connecting to WiFi...")
+        wlan.connect(config.WiFi_SSID, config.WiFi_PASSWORD)
+    except OSError:
+        print("WiFi connect error")
+        return False
 
     timeout = 10
 

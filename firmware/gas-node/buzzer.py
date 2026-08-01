@@ -18,8 +18,11 @@ def buzz(duration=0.5):
 def play_gas_alert(cycles=3, duration=0.4):
     for _ in range(cycles):
         buzz(duration)
-        time.sleep(0.3)  # Short pause between cycles        
+        time.sleep(0.2)          # Short pause between cycles        
+
         buzz(duration)
+        time.sleep(0.5)          # Short pause between cycles        
+
 
 # Stop buzzer function
 def stop_buzzer():
