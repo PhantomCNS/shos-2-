@@ -11,26 +11,31 @@ blynk = None
 def connect_to_wifi():
 
     if wlan.isconnected():
+        config.check_led.on()
         return True
 
     if not wlan.active():
         wlan.active(True)
+
+    # Connect to WiFi
+    print("Connecting to WiFi...")
     wlan.connect(config.WiFi_SSID, config.WiFi_PASSWORD)
+
     timeout = 10
 
     while timeout > 0:
+
         if wlan.isconnected():
-            config.WIFI_LED.on()
+            config.check_led.on()
             utils.debug_print(str(wlan.ifconfig()))
             return True
 
         time.sleep(1)
         timeout -= 1
 
-    config.WIFI_LED.off()
+    config.check_led.off()
     print("WiFi Failed")
     return False
-
 
 def connect_blynk():
     global blynk
