@@ -13,16 +13,16 @@ import utils
 
 muted = False  # Global variable to track buzzer state
 def H_Mute_ON(pin):
-    if not muted:
-        muted = True
+    global muted
+    muted = True
 
-def H_MUTE_OFF(pin):
-    if muted:
-        muted = False
-
+def H_Mute_OFF(pin):
+    global muted
+    muted = False
+    
 # btn IRQ
 config.ON_BTN.irq(trigger = Pin.IRQ_FALLING, handler = H_Mute_ON)
-config.OFF_BTN.irq(trigger = Pin.IRQ_FALLING, handler = H_MUTE_OFF)
+config.OFF_BTN.irq(trigger = Pin.IRQ_FALLING, handler = H_Mute_OFF)
 
 # Mute buzzer function
 def mute_buzzer(value):
@@ -58,7 +58,7 @@ while True:
 
     gas_value = config.GAS_SENSOR.read()
     utils.debug_print("Gas value = " + str(gas_value))
-    if gas_value == 0:
+    if gas_value > config.gas_threshold:
         config.red_LED.on()
         buzzer_allowed()
         utils.debug_print("Gas leak detected, buzzer activated")
@@ -89,7 +89,11 @@ while True:
     # dht_temp = dht_sensor.temperature()
     # dht_humidity = dht_sensor.humidity()
 
-    connect.ensure_connection()
+    connected = connect.ensure_connection()
+
+    if connected and connect.blynk and not hasattr(connect.blynk, "_registered"):
+        connect.blynk.on(config.SWITCH_IN_VPIN)(mute_buzzer)
+        connect.blynk._registered = True
 
     if connect.blynk:
         connect.blynk.run()

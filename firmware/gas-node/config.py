@@ -7,8 +7,8 @@ import network
 #define BLYNK_AUTH_TOKEN "PtZuWfyPnv1tC9UJH8jtw85UmL-z9QTG"
 
 # Pin Configurations
-gas_sensor_pin = 21
-dht_sensor_pin = 4
+gas_sensor_pin = 34
+# dht_sensor_pin = 5
 relay_pin = 18
 Buzzer_pin = 19
 LED_pin = 2
@@ -16,7 +16,7 @@ check_pin = 4
 fan_in_pin = 17
 BLYNK_TEMPLATE_ID = "TMPL2663gkE68"
 blynk_auth_token = "PtZuWfyPnv1tC9UJH8jtw85UmL-z9QTG"
-WiFi_SSID = "Mohamed"
+WiFi_SSID = "Mohamed's A05s"
 WiFi_PASSWORD = "mh01013404152"
 ON_BTN_Pin = 12
 OFF_BTN_Pin = 13
