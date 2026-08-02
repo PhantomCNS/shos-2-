@@ -25,7 +25,7 @@ OFF_BTN_Pin = 13
 GAS_SENSOR = ADC(Pin(gas_sensor_pin))
 GAS_SENSOR.atten(ADC.ATTN_11DB)
 GAS_SENSOR.width(ADC.WIDTH_12BIT)
-DHT_SENSOR = Pin(dht_sensor_pin, Pin.IN)
+# DHT_SENSOR = Pin(dht_sensor_pin, Pin.IN)
 RELAY = Pin(relay_pin, Pin.OUT)
 BUZZER = Pin(Buzzer_pin, Pin.OUT)
 red_LED = Pin(LED_pin, Pin.OUT)
@@ -36,8 +36,8 @@ OFF_BTN = Pin(OFF_BTN_Pin, Pin.IN, Pin.PULL_UP)
 
 # BLYNK Configuration
 GAS_SENSOR_VPIN = 0
-DHT_TEMP_VPIN = 1
-DHT_HUM_VPIN = 2
+# DHT_TEMP_VPIN = 1
+# DHT_HUM_VPIN = 2
 RELAY_VPIN = 5
 SWITCH_IN_VPIN = "V4"
 
