@@ -12,12 +12,23 @@ import utils
 
 
 muted = False  # Global variable to track buzzer state
+def H_Mute_ON(pin):
+    if not muted:
+        muted = True
 
+def H_MUTE_OFF(pin):
+    if muted:
+        muted = False
+
+# btn IRQ
+config.ON_BTN.irq(trigger = Pin.IRQ_FALLING, handler = H_Mute_ON)
+config.OFF_BTN.irq(trigger = Pin.IRQ_FALLING, handler = H_MUTE_OFF)
 
 # Mute buzzer function
 def mute_buzzer(value):
     global muted
     utils.debug_print("Buzzer state changed to: " + str(value[0]))
+    
     if value[0] == "1":
         muted = True
     else:
