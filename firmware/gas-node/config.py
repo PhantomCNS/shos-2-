@@ -16,8 +16,8 @@ check_pin = 4
 fan_in_pin = 17
 BLYNK_TEMPLATE_ID = "TMPL2663gkE68"
 blynk_auth_token = "PtZuWfyPnv1tC9UJH8jtw85UmL-z9QTG"
-WiFi_SSID = "Mohamed's A05s"
-WiFi_PASSWORD = "mh01013404152"
+WiFi_SSID = "AhbabElRahman"
+WiFi_PASSWORD = "AhmedEzzatMAS2#"
 ON_BTN_Pin = 12
 OFF_BTN_Pin = 13
 
@@ -44,4 +44,4 @@ SWITCH_IN_VPIN = "V4"
 
 # thresholds
 dht_humidity_threshold = 60 
-gas_threshold = 100
+gas_threshold = 250

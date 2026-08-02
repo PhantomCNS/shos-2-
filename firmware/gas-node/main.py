@@ -108,4 +108,4 @@ while True:
 
     # BlynkMan.send_relay(fan_state)
 
-    time.sleep(1)
+    time.sleep(1) 
