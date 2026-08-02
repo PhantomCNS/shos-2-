@@ -43,4 +43,4 @@ SWITCH_IN_VPIN = "V4"
 
 # thresholds
 dht_humidity_threshold = 60 
-gas_threshold = 100
+gas_threshold = 30
