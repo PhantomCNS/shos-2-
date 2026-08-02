@@ -18,3 +18,6 @@ def send_humidity(value):
 def send_relay(value):
     connect.blynk.virtual_write(config.RELAY_VPIN, value)
 
+def send_gas_value(value):
+    connect.blynk.virtual_write(config.GAS_VALUE, value)
+

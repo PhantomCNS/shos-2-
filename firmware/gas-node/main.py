@@ -104,6 +104,8 @@ while True:
 
     if connect.blynk:
         BlynkMan.send_gas(gas_state)
+        BlynkMan.send_gas(gas_state)
+
     # BlynkMan.send_relay(fan_state)
 
     time.sleep(1)
