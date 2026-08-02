@@ -1,4 +1,4 @@
-from machine import Pin
+from machine import Pin, ADC
 import time
 #import dht
 import network
@@ -16,13 +16,15 @@ check_pin = 4
 fan_in_pin = 17
 BLYNK_TEMPLATE_ID = "TMPL2663gkE68"
 blynk_auth_token = "PtZuWfyPnv1tC9UJH8jtw85UmL-z9QTG"
-WiFi_SSID = "Emy"
-WiFi_PASSWORD = "Emy&Omar&Salma"
+WiFi_SSID = "Mohamed"
+WiFi_PASSWORD = "mh01013404152"
 ON_BTN_Pin = 12
 OFF_BTN_Pin = 13
 
 # Pin Objects
-GAS_SENSOR = Pin(gas_sensor_pin, Pin.IN)
+GAS_SENSOR = ADC(Pin(gas_sensor_pin))
+GAS_SENSOR.atten(ADC.ATTN_11DB)
+GAS_SENSOR.width(ADC.WIDTH_12BIT)
 DHT_SENSOR = Pin(dht_sensor_pin, Pin.IN)
 RELAY = Pin(relay_pin, Pin.OUT)
 BUZZER = Pin(Buzzer_pin, Pin.OUT)
@@ -39,4 +41,6 @@ DHT_HUM_VPIN = 2
 RELAY_VPIN = 5
 SWITCH_IN_VPIN = "V4"
 
-dht_humidity_threshold = 60  # Humidity threshold for fan activation
+# thresholds
+dht_humidity_threshold = 60 
+gas_threshold = 100

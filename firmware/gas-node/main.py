@@ -56,7 +56,7 @@ alarm_sent = False
 while True:
     utils.debug_print("Entered Main Loop")
 
-    gas_value = config.GAS_SENSOR.value()
+    gas_value = config.GAS_SENSOR.read()
     utils.debug_print("Gas value = " + str(gas_value))
     if gas_value == 0:
         config.red_LED.on()
