@@ -10,7 +10,9 @@ import utils
 
 # dht_sensor = dht.DHT22(config.DHT_SENSOR)
 
-
+# ===================================
+# Mute Buzzer functions
+# -----------------------------------
 muted = False  # Global variable to track buzzer state
 def H_Mute_ON(pin):
     global muted
@@ -25,7 +27,9 @@ def H_Mute_OFF(pin):
 config.ON_BTN.irq(trigger = Pin.IRQ_FALLING, handler = H_Mute_ON)
 config.OFF_BTN.irq(trigger = Pin.IRQ_FALLING, handler = H_Mute_OFF)
 
-# Mute buzzer function
+# ===================================
+# Mute Buzzer function with Blynk
+# -----------------------------------
 def mute_buzzer(value):
     global muted
     utils.debug_print("Buzzer state changed to: " + str(value[0]))
@@ -41,7 +45,9 @@ def buzzer_allowed():
     if not muted:
         buzzer.play_gas_alert(cycles=2)
 
+# ======================================
 # Initialize network and connect to WiFi
+# --------------------------------------
 if connect.ensure_connection():
     if not hasattr(connect.blynk, "_registered"):
         connect.blynk.on(config.SWITCH_IN_VPIN)(mute_buzzer)
@@ -51,29 +57,35 @@ if connect.ensure_connection():
 if connect.wlan.isconnected():
     print("Successfully Connected!!!")
 
+# ===================================
+# Alarm status
+# -----------------------------------
 alarm_sent = False
 
+# ===================================
 # Main loop
+# ---------
 while True:
     utils.debug_print("Entered Main Loop")
 
+# ===================================
+# Reading sensors
+# -----------------------------------
+    # dht_sensor.measure()
+    # dht_temp = dht_sensor.temperature()
+    # dht_humidity = dht_sensor.humidity()
     gas_value = config.GAS_SENSOR.read()
     utils.debug_print("Gas value = " + str(gas_value))
+
+# ===================================
+# If gas value exceeds the threshold
+#------------------------------------
     if gas_value > config.gas_threshold:
         config.red_LED.on()
         buzzer_allowed()
         utils.debug_print("Gas leak detected, buzzer activated")
         config.RELAY.on()
         gas_state = "!!GAS LEAK DETECTED!!"
-
-        if not alarm_sent:
-            if connect.blynk:
-                connect.blynk.log_event(
-                    "gas_leak",
-                    "Gas leak detected in kitchen"
-                )
-                alarm_sent = True
-
     else:
         config.red_LED.off()
         buzzer.stop_buzzer()
@@ -86,10 +98,9 @@ while True:
 
 
 
-    # dht_sensor.measure()
-    # dht_temp = dht_sensor.temperature()
-    # dht_humidity = dht_sensor.humidity()
-
+# ===================================
+# Starts Blynk and its code
+# -----------------------------------
     connected = connect.ensure_connection()
 
     if connected and connect.blynk and not hasattr(connect.blynk, "_registered"):
@@ -97,6 +108,13 @@ while True:
         connect.blynk._registered = True
 
     if connected:
+        if not alarm_sent:
+            if connect.blynk:
+                connect.blynk.log_event(
+                    "gas_leak",
+                    "Gas leak detected in kitchen"
+                )
+                alarm_sent = True
         try:
             connect.blynk.run()
 
