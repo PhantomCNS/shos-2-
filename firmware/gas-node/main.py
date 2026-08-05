@@ -96,16 +96,17 @@ while True:
         connect.blynk.on(config.SWITCH_IN_VPIN)(mute_buzzer)
         connect.blynk._registered = True
 
-    if connect.blynk:
-        connect.blynk.run()
+    if connected:
+        try:
+            connect.blynk.run()
 
-    # BlynkMan.send_humidity(dht_humidity)
-    # BlynkMan.send_temperature(dht_temp)
+            BlynkMan.send_gas(gas_state)
+            BlynkMan.send_gas_value(gas_value)
+            # BlynkMan.send_humidity(dht_humidity)
+            # BlynkMan.send_temperature(dht_temp)
+            # BlynkMan.send_relay(fan_state)
 
-    if connect.blynk:
-        BlynkMan.send_gas(gas_state)
-        BlynkMan.send_gas_value(gas_value)
-
-    # BlynkMan.send_relay(fan_state)
-
+        except Exception as e:
+            print("Blynk Lost:", e)
+            connect.blynk = None        
     time.sleep(1) 
