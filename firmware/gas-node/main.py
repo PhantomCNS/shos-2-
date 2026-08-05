@@ -60,7 +60,8 @@ alarm_sent = False
 
 
 # ===== ges detection and dealing with it =====
-def deal_with_gas():
+def deal_with_gas(gas_value):
+    global gas_state, alarm_sent
     if gas_value > config.gas_threshold:
         config.red_LED.on()
         buzzer_allowed()
@@ -91,7 +92,8 @@ while True:
     # dht_humidity = dht_sensor.humidity()
 
 # ===== Actions =====
-    deal_with_gas()
+    deal_with_gas(gas_value)
+    
 
 # ===== start connection and its code =====
     connected = connect.ensure_connection()
