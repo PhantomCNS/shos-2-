@@ -58,20 +58,9 @@ if connect.wlan.isconnected():
 # ===== Alarm Status =====
 alarm_sent = False
 
-# ===== Main Loop =====
-while True:
-    utils.debug_print("Entered Main Loop")
 
-# ===== Read Sensors =====
-    # dht_sensor.measure()
-    # dht_temp = dht_sensor.temperature()
-    # dht_humidity = dht_sensor.humidity()
-    gas_value = config.GAS_SENSOR.read()
-    utils.debug_print("Gas value = " + str(gas_value))
-
-# ===================================
-# If gas value exceeds the threshold
-#------------------------------------
+# ===== ges detection and dealing with it =====
+def deal_with_gas():
     if gas_value > config.gas_threshold:
         config.red_LED.on()
         buzzer_allowed()
@@ -88,11 +77,23 @@ while True:
     utils.debug_print("Gas Sensor Value: " + str(gas_state))
     utils.debug_print("Relay State: " + str(config.RELAY.value()))
 
+# ===== Main Loop =====
+while True:
 
+    utils.debug_print("Entered Main Loop")
 
-# ===================================
-# Starts connections and its code
-# -----------------------------------
+# ===== Read Sensors =====
+    gas_value = config.GAS_SENSOR.read()
+    utils.debug_print("Gas value = " + str(gas_value))
+
+    # dht_sensor.measure()
+    # dht_temp = dht_sensor.temperature()
+    # dht_humidity = dht_sensor.humidity()
+
+# ===== Actions =====
+    deal_with_gas()
+
+# ===== start connection and its code =====
     connected = connect.ensure_connection()
 
     if connected and connect.blynk and not hasattr(connect.blynk, "_registered"):
