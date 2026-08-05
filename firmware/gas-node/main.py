@@ -40,14 +40,12 @@ def mute_buzzer(value):
         muted = False
 
 
-# Function to play gas alert if buzzer is allowed to sound
+# ===== Play alert if buzzer is allowed =====
 def buzzer_allowed():
     if not muted:
         buzzer.play_gas_alert(cycles=2)
 
-# ======================================
-# Initialize network and connect to WiFi
-# --------------------------------------
+# ===== Initialize network and Connect to WiFi =====
 if connect.ensure_connection():
     if not hasattr(connect.blynk, "_registered"):
         connect.blynk.on(config.SWITCH_IN_VPIN)(mute_buzzer)
@@ -57,20 +55,14 @@ if connect.ensure_connection():
 if connect.wlan.isconnected():
     print("Successfully Connected!!!")
 
-# ===================================
-# Alarm status
-# -----------------------------------
+# ===== Alarm Status =====
 alarm_sent = False
 
-# ===================================
-# Main loop
-# ---------
+# ===== Main Loop =====
 while True:
     utils.debug_print("Entered Main Loop")
 
-# ===================================
-# Reading sensors
-# -----------------------------------
+# ===== Read Sensors =====
     # dht_sensor.measure()
     # dht_temp = dht_sensor.temperature()
     # dht_humidity = dht_sensor.humidity()
@@ -99,7 +91,7 @@ while True:
 
 
 # ===================================
-# Starts Blynk and its code
+# Starts connections and its code
 # -----------------------------------
     connected = connect.ensure_connection()
 
@@ -108,15 +100,17 @@ while True:
         connect.blynk._registered = True
 
     if connected:
-        if not alarm_sent:
-            if connect.blynk:
-                connect.blynk.log_event(
-                    "gas_leak",
-                    "Gas leak detected in kitchen"
-                )
-                alarm_sent = True
         try:
             connect.blynk.run()
+
+            if not alarm_sent:
+                if connect.blynk:
+                    if gas_value > config.gas_threshold:
+                        connect.blynk.log_event(
+                            "gas_leak",
+                            "Gas leak detected in kitchen"
+                        )
+                        alarm_sent = True
 
             BlynkMan.send_gas(gas_state)
             BlynkMan.send_gas_value(gas_value)
