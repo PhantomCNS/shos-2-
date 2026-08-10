@@ -10,9 +10,7 @@ import utils
 
 # dht_sensor = dht.DHT22(config.DHT_SENSOR)
 
-# ===================================
-# Mute Buzzer functions
-# -----------------------------------
+# ===== Mute Buzzer function =====
 muted = False  # Global variable to track buzzer state
 def H_Mute_ON(pin):
     global muted
@@ -27,9 +25,7 @@ def H_Mute_OFF(pin):
 config.ON_BTN.irq(trigger = Pin.IRQ_FALLING, handler = H_Mute_ON)
 config.OFF_BTN.irq(trigger = Pin.IRQ_FALLING, handler = H_Mute_OFF)
 
-# ===================================
-# Mute Buzzer function with Blynk
-# -----------------------------------
+# ===== Mute buzzer function in Blynk =====
 def mute_buzzer(value):
     global muted
     utils.debug_print("Buzzer state changed to: " + str(value[0]))

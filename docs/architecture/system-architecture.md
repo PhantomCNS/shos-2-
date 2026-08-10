@@ -4,7 +4,6 @@ shos is a modular smart home platform based on ESP32 and Micropython
 ---
 
 ## Nodes
-
 ---
 
 ### Gas Node
@@ -21,7 +20,6 @@ shos is a modular smart home platform based on ESP32 and Micropython
 - Take immediate action
 - Send data via Wi-Fi
 - Trigger local alarm if necessary
-
 ---
 
 ### Display Node
@@ -34,5 +32,4 @@ shos is a modular smart home platform based on ESP32 and Micropython
 - display data
 - display connection status
 - show alarms
-
 ---
