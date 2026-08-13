@@ -15,17 +15,16 @@ utils.debug_print("Loaded WiFi credentials: SSID={}, Password={}".format(ssid, p
 
 # ==== if ssid is None, then start AP mode =====
 connected = False
-if ssid is None:
+if ssid is None or password is None:
     utils.debug_print("No WiFi credentials found. Starting AP mode for setup.")
     wifi_setup.start_ap_mode()
 else:
     utils.debug_print("WiFi credentials found. Attempting to connect to WiFi.")
-    # ===== Initialize network and Connect to WiFi =====
-    try:
-        connected = connect.ensure_connection()
-    except Exception as e:
-        utils.debug_print("Error connecting to WiFi: {}".format(e))
-        utils.debug_print("Starting AP mode for setup.")
+
+    connected = connect.ensure_connection()
+
+    if not connected:
+        utils.debug_print("WiFi connection failed. Starting AP mode for setup.")
         wifi_setup.start_ap_mode()
 
 # dht_sensor = dht.DHT22(config.DHT_SENSOR)
@@ -61,13 +60,13 @@ def buzzer_allowed():
     if not muted:
         buzzer.play_gas_alert(cycles=2)
 
-if not hasattr(connect.blynk, "_registered"):
+
+if connected:
+    print("Successfully Connected!!!")
+
+if connected and connect.blynk and not hasattr(connect.blynk, "_registered"):
     connect.blynk.on(config.SWITCH_IN_VPIN)(mute_buzzer)
     connect.blynk._registered = True
-
-
-if connect.wlan.isconnected():
-    print("Successfully Connected!!!")
 
 # ===== Alarm Status =====
 alarm_sent = False
@@ -110,11 +109,6 @@ while True:
     
 
 # ===== start connection and its code =====
-
-    if connected and connect.blynk and not hasattr(connect.blynk, "_registered"):
-        connect.blynk.on(config.SWITCH_IN_VPIN)(mute_buzzer)
-        connect.blynk._registered = True
-
     if connected:
         try:
             connect.blynk.run()

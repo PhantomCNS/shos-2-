@@ -1,4 +1,5 @@
 # ====== imports ======
+from platform import machine
 import socket
 import utils
 import wifi_storage
@@ -37,6 +38,7 @@ while True:
 
         # ===== save ssid & password ======
         wifi_storage.save_wifi_credentials(ssid, password)
+        machine.reset()
 
     file = open("web/index.html", "r")
     html = file.read()
