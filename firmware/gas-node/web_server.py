@@ -13,13 +13,24 @@ while True:
     client, address = server.accept()
     print("Client connected from:", address)
 
-    request = client.recv(1024)
-    print("Request:", request)
+    # ====== getting POST data ======
+    request = client.recv(1024).decode()
+
+    print("========== REQUEST ==========")
+    print(request)
+
+    body = request.split("\r\n\r\n")[1]
+
+    print("========== BODY ==========")
+    print(body)
+
+    parts = body.split("&")
+    print(parts)
 
     file = open("web/index.html", "r")
     html = file.read()
     file.close()
-    
+
     response = """\
     HTTP/1.1 200 OK
     Content-Type: text/html
