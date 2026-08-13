@@ -1,11 +1,13 @@
 from machine import Pin, ADC
 import time
+import wifi_storage
 #import dht
 import network
 #define BLYNK_TEMPLATE_ID "TMPL2663gkE68"
 #define BLYNK_TEMPLATE_NAME "SHOS 1"
 #define BLYNK_AUTH_TOKEN "PtZuWfyPnv1tC9UJH8jtw85UmL-z9QTG"
 
+ssid, password = wifi_storage.load_wifi_credentials()
 # Pin Configurations
 gas_sensor_pin = 34
 # dht_sensor_pin = 5
@@ -16,8 +18,8 @@ check_pin = 4
 fan_in_pin = 17
 BLYNK_TEMPLATE_ID = "TMPL2663gkE68"
 blynk_auth_token = "PtZuWfyPnv1tC9UJH8jtw85UmL-z9QTG"
-WiFi_SSID = "AhbabElRahman"
-WiFi_PASSWORD = "AhmedEzzatMAS2#"
+WiFi_SSID = ssid
+WiFi_PASSWORD = password
 ON_BTN_Pin = 12
 OFF_BTN_Pin = 13
 

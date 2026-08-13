@@ -15,18 +15,24 @@ utils.debug_print("Loaded WiFi credentials: SSID={}, Password={}".format(ssid, p
 
 # ==== if ssid is None, then start AP mode =====
 connected = False
-if ssid is None or password is None:
-    utils.debug_print("No WiFi credentials found. Starting AP mode for setup.")
-    wifi_setup.start_ap_mode()
-else:
-    utils.debug_print("WiFi credentials found. Attempting to connect to WiFi.")
 
+if ssid is None or password is None:
+    utils.debug_print(
+        "No WiFi credentials found. Starting AP mode."
+    )
+    wifi_setup.start_ap_mode()
+
+else:
+    utils.debug_print(
+        "WiFi credentials found. Attempting to connect."
+    )
     connected = connect.ensure_connection()
 
     if not connected:
-        utils.debug_print("WiFi connection failed. Starting AP mode for setup.")
+        utils.debug_print(
+            "WiFi connection failed. Starting AP mode."
+        )
         wifi_setup.start_ap_mode()
-
 # dht_sensor = dht.DHT22(config.DHT_SENSOR)
 
 # ===== Mute Buzzer function =====
