@@ -16,3 +16,12 @@ def save_wifi_credentials(ssid, password):
     # ===== save to file ======
     with open("wifi_credentials.json", "w") as file:
         file.write(text)
+
+def load_wifi_credentials():
+    try:
+        with open("wifi_credentials.json", "r") as file:
+            text = file.read()
+            data = json.loads(text)
+            return data["ssid"], data["password"]
+    except FileNotFoundError:
+        return None, None

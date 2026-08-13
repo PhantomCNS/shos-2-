@@ -2,11 +2,31 @@ from machine import Pin
 import time
 import config
 import connect
+import wifi_storage
+import wifi_setup
 import buzzer
 #import dht
-import BlynkLib
 import BlynkMan
 import utils
+
+# ===== checking wifi credentials =====
+ssid, password = wifi_storage.load_wifi_credentials()
+utils.debug_print("Loaded WiFi credentials: SSID={}, Password={}".format(ssid, password))
+
+# ==== if ssid is None, then start AP mode =====
+connected = False
+if ssid is None:
+    utils.debug_print("No WiFi credentials found. Starting AP mode for setup.")
+    wifi_setup.start_ap_mode()
+else:
+    utils.debug_print("WiFi credentials found. Attempting to connect to WiFi.")
+    # ===== Initialize network and Connect to WiFi =====
+    try:
+        connected = connect.ensure_connection()
+    except Exception as e:
+        utils.debug_print("Error connecting to WiFi: {}".format(e))
+        utils.debug_print("Starting AP mode for setup.")
+        wifi_setup.start_ap_mode()
 
 # dht_sensor = dht.DHT22(config.DHT_SENSOR)
 
@@ -41,11 +61,9 @@ def buzzer_allowed():
     if not muted:
         buzzer.play_gas_alert(cycles=2)
 
-# ===== Initialize network and Connect to WiFi =====
-if connect.ensure_connection():
-    if not hasattr(connect.blynk, "_registered"):
-        connect.blynk.on(config.SWITCH_IN_VPIN)(mute_buzzer)
-        connect.blynk._registered = True
+if not hasattr(connect.blynk, "_registered"):
+    connect.blynk.on(config.SWITCH_IN_VPIN)(mute_buzzer)
+    connect.blynk._registered = True
 
 
 if connect.wlan.isconnected():
@@ -92,7 +110,6 @@ while True:
     
 
 # ===== start connection and its code =====
-    connected = connect.ensure_connection()
 
     if connected and connect.blynk and not hasattr(connect.blynk, "_registered"):
         connect.blynk.on(config.SWITCH_IN_VPIN)(mute_buzzer)
