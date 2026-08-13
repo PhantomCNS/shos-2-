@@ -7,7 +7,8 @@ ap = network.WLAN(network.AP_IF)
 ap.active(True)
 ap.config(
     ssid='SHOS-Setup',
-    password='gasnode123'
+    password='gasnode123',
+    authmode=network.AUTH_WPA_WPA2_PSK
     )
 utils.debug_print("Access Point started with SSID: SHOS-Setup")
 
