@@ -1,6 +1,7 @@
 # ====== imports ======
 import socket
 import utils
+import wifi_storage
 
 
 server = socket.socket()
@@ -33,6 +34,9 @@ while True:
         # ====== filter ssid & password ======
         ssid = parts[0].split("=")[1]
         password = parts[1].split("=")[1]
+
+        # ===== save ssid & password ======
+        wifi_storage.save_wifi_credentials(ssid, password)
 
     file = open("web/index.html", "r")
     html = file.read()
