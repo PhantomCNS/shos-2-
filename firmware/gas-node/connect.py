@@ -34,7 +34,7 @@ def connect_to_wifi():
             utils.debug_print(str(wlan.ifconfig()))
             return True
 
-        time.sleep(1)
+        time.sleep(3)
         timeout -= 1
 
     config.check_led.off()

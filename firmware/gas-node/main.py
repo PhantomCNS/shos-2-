@@ -5,6 +5,7 @@ import connect
 import wifi_storage
 import wifi_setup
 import buzzer
+import web_server
 #import dht
 import BlynkMan
 import utils
@@ -102,7 +103,7 @@ while True:
 
     utils.debug_print("Entered Main Loop")
 
-# ===== Read Sensors =====
+    # ===== Read Sensors =====
     gas_value = config.GAS_SENSOR.read()
     utils.debug_print("Gas value = " + str(gas_value))
 
@@ -110,11 +111,14 @@ while True:
     # dht_temp = dht_sensor.temperature()
     # dht_humidity = dht_sensor.humidity()
 
-# ===== Actions =====
+    # ===== Actions =====
     deal_with_gas(gas_value)
     
 
-# ===== start connection and its code =====
+    # ======= check web server for new requests ========
+    web_server.handle_requests()
+
+    # ===== start connection and its code =====
     if connected:
         try:
             connect.blynk.run()
