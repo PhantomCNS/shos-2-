@@ -19,13 +19,20 @@ while True:
     print("========== REQUEST ==========")
     print(request)
 
-    body = request.split("\r\n\r\n")[1]
+    if request.startswith("POST /save"):
+        body = request.split("\r\n\r\n")[1]
 
-    print("========== BODY ==========")
-    print(body)
+        print("========== BODY ==========")
+        print(body)
 
-    parts = body.split("&")
-    print(parts)
+        # ====== gets password & ssid ======
+
+        parts = body.split("&")
+        print(parts)
+
+        # ====== filter ssid & password ======
+        ssid = parts[0].split("=")[1]
+        password = parts[1].split("=")[1]
 
     file = open("web/index.html", "r")
     html = file.read()
