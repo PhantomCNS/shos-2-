@@ -10,12 +10,12 @@ import network
 ssid, password = wifi_storage.load_wifi_credentials()
 # Pin Configurations
 gas_sensor_pin = 34
-# dht_sensor_pin = 5
+dht_sensor_pin = 36
 relay_pin = 18
 Buzzer_pin = 19
 LED_pin = 2
 check_pin = 4
-fan_in_pin = 17
+fan_in_pin = 13
 BLYNK_TEMPLATE_ID = "TMPL2663gkE68"
 blynk_auth_token = "PtZuWfyPnv1tC9UJH8jtw85UmL-z9QTG"
 WiFi_SSID = ssid
@@ -27,7 +27,7 @@ OFF_BTN_Pin = 13
 GAS_SENSOR = ADC(Pin(gas_sensor_pin))
 GAS_SENSOR.atten(ADC.ATTN_11DB)
 GAS_SENSOR.width(ADC.WIDTH_12BIT)
-# DHT_SENSOR = Pin(dht_sensor_pin, Pin.IN)
+DHT_SENSOR = Pin(dht_sensor_pin, Pin.IN)
 RELAY = Pin(relay_pin, Pin.OUT)
 BUZZER = Pin(Buzzer_pin, Pin.OUT)
 red_LED = Pin(LED_pin, Pin.OUT)
@@ -38,8 +38,8 @@ OFF_BTN = Pin(OFF_BTN_Pin, Pin.IN, Pin.PULL_UP)
 
 # BLYNK Configuration
 GAS_SENSOR_VPIN = 0
-# DHT_TEMP_VPIN = 1
-# DHT_HUM_VPIN = 2
+DHT_TEMP_VPIN = 32
+DHT_HUM_VPIN = 33
 GAS_VALUE = 3
 RELAY_VPIN = 5
 SWITCH_IN_VPIN = "V4"

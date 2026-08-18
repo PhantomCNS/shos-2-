@@ -13,24 +13,92 @@ def handle_requests():
     if server is None:
         return
 
+    # Check for a new client
     try:
         client, address = server.accept()
 
     except OSError:
-        # Nobody connected.
+        # Nobody connected
         return
 
     print("Client connected:", address)
 
     try:
 
-        client.settimeout(1)
+        client.settimeout(0.5)
 
         request = client.recv(1024).decode()
 
+        print("========== REQUEST ==========")
         print(request)
 
-        # Handle request...
+        # ====== GET / ======
+        
+
+        if request.startswith("GET / "):
+
+            with open("web/index.html", "r") as file:
+                html = file.read()
+
+            response = (
+                "HTTP/1.1 200 OK\r\n"
+                "Content-Type: text/html; charset=UTF-8\r\n"
+                "Content-Length: {}\r\n"
+                "Connection: close\r\n"
+                "\r\n"
+                "{}"
+            ).format(len(html), html)
+
+            client.send(response.encode())
+
+        # ====== POST /save ======
+
+
+        elif request.startswith("POST /save"):
+
+            body = request.split("\r\n\r\n", 1)[1]
+
+            print("BODY:")
+            print(body)
+
+            parts = body.split("&")
+
+            ssid = url_decode(
+                parts[0].split("=", 1)[1]
+            )
+
+            password = url_decode(
+                parts[1].split("=", 1)[1]
+            )
+
+            print("SSID:", ssid)
+            print("Password:", password)
+
+            wifi_storage.save_wifi_credentials(
+                ssid,
+                password
+            )
+
+            response = (
+                "HTTP/1.1 200 OK\r\n"
+                "Content-Type: text/html\r\n"
+                "Connection: close\r\n"
+                "\r\n"
+                "<html>"
+                "<body>"
+                "<h1>WiFi credentials saved!</h1>"
+                "<p>ESP32 is rebooting...</p>"
+                "</body>"
+                "</html>"
+            )
+
+            client.send(response.encode())
+
+            client.close()
+
+            print("Credentials saved. Rebooting...")
+
+            reset()
 
     except Exception as e:
 
@@ -38,7 +106,12 @@ def handle_requests():
 
     finally:
 
-        client.close()
+        try:
+            client.close()
+        except:
+            pass
+
+
 
 # ====== URL Decode function ======
 def url_decode(text):

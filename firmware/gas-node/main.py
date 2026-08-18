@@ -34,7 +34,7 @@ else:
             "WiFi connection failed. Starting AP mode."
         )
         wifi_setup.start_ap_mode()
-# dht_sensor = dht.DHT22(config.DHT_SENSOR)
+dht_sensor = dht.DHT22(config.DHT_SENSOR)
 
 # ===== Mute Buzzer function =====
 muted = False  # Global variable to track buzzer state
@@ -107,10 +107,10 @@ while True:
     gas_value = config.GAS_SENSOR.read()
     utils.debug_print("Gas value = " + str(gas_value))
 
-    # dht_sensor.measure()
-    # dht_temp = dht_sensor.temperature()
-    # dht_humidity = dht_sensor.humidity()
-
+    dht_sensor.measure()
+    dht_temp = dht_sensor.temperature()
+    dht_humidity = dht_sensor.humidity()
+    fan_state = "ON" if config.fan.value() == 1 else "OFF"
     # ===== Actions =====
     deal_with_gas(gas_value)
     
@@ -134,9 +134,9 @@ while True:
 
             BlynkMan.send_gas(gas_state)
             BlynkMan.send_gas_value(gas_value)
-            # BlynkMan.send_humidity(dht_humidity)
-            # BlynkMan.send_temperature(dht_temp)
-            # BlynkMan.send_relay(fan_state)
+            BlynkMan.send_humidity(dht_humidity)
+            BlynkMan.send_temperature(dht_temp)
+            BlynkMan.send_relay(fan_state)
 
         except Exception as e:
             print("Blynk Lost:", e)
