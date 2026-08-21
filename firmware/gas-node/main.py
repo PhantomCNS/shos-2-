@@ -6,7 +6,7 @@ import wifi_storage
 import wifi_setup
 import buzzer
 import web_server
-#import dht
+import dht
 import BlynkMan
 import utils
 
@@ -34,7 +34,7 @@ else:
             "WiFi connection failed. Starting AP mode."
         )
         wifi_setup.start_ap_mode()
-dht_sensor = dht.DHT22(config.DHT_SENSOR)
+dht_sensor = dht.DHT11(config.DHT_SENSOR)
 
 # ===== Mute Buzzer function =====
 muted = False  # Global variable to track buzzer state
@@ -116,7 +116,8 @@ while True:
     
 
     # ======= check web server for new requests ========
-    web_server.handle_requests()
+    if not connected:
+        web_server.handle_requests()
 
     # ===== start connection and its code =====
     if connected:
@@ -141,4 +142,4 @@ while True:
         except Exception as e:
             print("Blynk Lost:", e)
             connect.blynk = None        
-    time.sleep(1) 
+    time.sleep(0.1) 

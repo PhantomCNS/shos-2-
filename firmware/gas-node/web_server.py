@@ -95,11 +95,9 @@ def handle_requests():
             client.send(response.encode())
 
             client.close()
-
+            
             print("Credentials saved. Rebooting...")
-
             reset()
-
     except Exception as e:
 
         print("HTTP error:", e)
