@@ -110,6 +110,7 @@ while True:
     dht_sensor.measure()
     dht_temp = dht_sensor.temperature()
     dht_humidity = dht_sensor.humidity()
+    print("DHT Temperature: {}°C, Humidity: {}%".format(dht_temp, dht_humidity))
     fan_state = "ON" if config.fan.value() == 1 else "OFF"
     # ===== Actions =====
     deal_with_gas(gas_value)

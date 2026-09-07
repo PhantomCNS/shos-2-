@@ -10,12 +10,12 @@ import network
 ssid, password = wifi_storage.load_wifi_credentials()
 # Pin Configurations
 gas_sensor_pin = 34
-dht_sensor_pin = 36
+dht_sensor_pin = 14
 relay_pin = 18
 Buzzer_pin = 19
 LED_pin = 2
 check_pin = 4
-fan_in_pin = 13
+fan_in_pin = 25
 BLYNK_TEMPLATE_ID = "TMPL2663gkE68"
 blynk_auth_token = "PtZuWfyPnv1tC9UJH8jtw85UmL-z9QTG"
 WiFi_SSID = ssid
